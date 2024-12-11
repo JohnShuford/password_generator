@@ -1,4 +1,50 @@
-#import needed libraries
+# Chat GPT Improvements
+import random
+import string
+
+# User input for password length
+while True:
+    numOfCharacters = input("How many characters would you like your password to be? ")
+    if numOfCharacters.isdigit():
+        numOfCharacters = int(numOfCharacters)
+        break
+    else:
+        print("Please enter a valid integer.")
+
+# Determine character types
+charType = []
+if input("Would you like lower case letters? (y/n) ").lower() == 'y':
+    charType.append('lower')
+if input("Would you like upper case letters? (y/n) ").lower() == 'y':
+    charType.append('upper')
+if input("Would you like digits? (y/n) ").lower() == 'y':
+    charType.append('nums')
+if input("Would you like special characters? (y/n) ").lower() == 'y':
+    charType.append('punctuation')
+
+if not charType:
+    print("No character types selected. Exiting...")
+    exit()
+
+char_map = {
+    'lower': string.ascii_lowercase,
+    'upper': string.ascii_uppercase,
+    'nums': string.digits,
+    'punctuation': string.punctuation
+}
+
+# Build the password
+password_chars = []
+for _ in range(numOfCharacters):
+    randCharType = random.choice(charType)
+    password_chars.append(random.choice(char_map[randCharType]))
+
+# Join into final password string
+password = ''.join(password_chars)
+print(password)
+
+'''
+~~~Begining of John's OG work and first attempt~~
 import random
 import string
 
@@ -48,3 +94,4 @@ for x in range(int(numOfCharacters)):
 password = ''.join(str(x) for x in emptyPassword)
 
 print(password)
+'''
