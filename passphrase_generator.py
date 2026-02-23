@@ -1,23 +1,10 @@
 import random
+import os
 
-# A list of common, easy-to-remember words for building passphrases
-WORD_LIST = [
-    "apple", "brave", "cabin", "dance", "eagle", "fence", "grape", "happy",
-    "irony", "juice", "kneel", "lemon", "mango", "night", "ocean", "piano",
-    "queen", "river", "stone", "tiger", "uncle", "vivid", "whale", "xenon",
-    "yacht", "zebra", "amber", "blaze", "coral", "delta", "ember", "flute",
-    "glory", "honey", "ivory", "jewel", "karma", "lunar", "maple", "noble",
-    "olive", "pearl", "quill", "raven", "solar", "torch", "ultra", "valor",
-    "water", "pixel", "youth", "zonal", "arena", "brush", "cloud", "drift",
-    "epoch", "frost", "grain", "haste", "inlet", "joust", "knack", "latch",
-    "mirth", "nerve", "onset", "prism", "quirk", "realm", "swift", "thorn",
-    "umbra", "vault", "wrath", "bison", "crisp", "dwarf", "fairy", "gecko",
-    "hotel", "index", "jelly", "koala", "llama", "magic", "ninja", "otter",
-    "panda", "radar", "salsa", "talon", "using", "vivid", "waltz", "extra",
-    "yodel", "zesty", "abbey", "bluff", "craft", "daisy", "elbow", "flair",
-    "guava", "hinge", "image", "jumbo", "kayak", "lingo", "marsh", "notch",
-    "outdo", "plumb", "quest", "risky", "scalp", "tabby", "unify", "venom",
-]
+# Load word list from words.txt (1024 words, 10 bits of entropy per word)
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(_script_dir, "words.txt")) as _f:
+    WORD_LIST = [line.strip() for line in _f if line.strip()]
 
 # User input for number of words
 while True:
