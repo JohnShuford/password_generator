@@ -33,19 +33,19 @@ When you enable all four character types, your pool is **94 possible characters*
 
 ### Passphrases (`passphrase_generator.py`)
 
-Passphrases trade raw character entropy for human memorability. This generator draws from a curated list of **120 common words**, giving each word approximately **6.9 bits of entropy**. Because the word list is intentionally small to keep words familiar, you need more words than a typical diceware passphrase to reach the same security level.
+Passphrases trade raw character entropy for human memorability. This generator draws from a curated list of **1,024 common words**, giving each word exactly **10 bits of entropy** (log₂ 1024 = 10). This is a significant improvement over smaller word lists — each additional word now contributes more entropy, so you need fewer words to reach a strong security level.
 
 | Word Count | Entropy (words only) | With Number Suffix | Security Level | Suitable For |
 |------------|---------------------|-------------------|----------------|--------------|
-| 4 words | ~28 bits | ~38 bits | Very Weak | Do not use alone |
-| 5 words | ~35 bits | ~45 bits | Weak | Do not use |
-| 6 words | ~41 bits | ~51 bits | Low | Low-stakes accounts only |
-| 7 words | ~48 bits | ~58 bits | Moderate | Low-stakes accounts |
-| 8 words | ~55 bits | ~65 bits | Reasonable | Standard accounts, especially with capitalization |
-| 10 words | ~69 bits | ~79 bits | Strong | High-value accounts |
-| 12+ words | ~83+ bits | ~93+ bits | Very Strong | Critical accounts |
+| 4 words | 40 bits | ~50 bits | Weak | Do not use alone |
+| 5 words | 50 bits | ~60 bits | Low | Low-stakes accounts only |
+| 6 words | 60 bits | ~70 bits | Moderate | Low-stakes accounts |
+| 7 words | 70 bits | ~80 bits | Strong | Standard accounts |
+| 8 words | 80 bits | ~90 bits | Very Strong | High-value accounts (email, banking) |
+| 10 words | 100 bits | ~110 bits | Excellent | Critical accounts, password manager master password |
+| 12+ words | 120+ bits | ~130+ bits | Outstanding | Encryption keys, root credentials |
 
-> **Note:** The number suffix adds ~10 bits of entropy. Capitalization adds roughly 1 bit per word. For best results, enable both options and use at least 8 words. If you need a truly high-security credential from this toolkit, use the random character generator instead.
+> **Note:** The number suffix adds ~10 bits of entropy. Capitalization adds roughly 1 bit per word. For best results, enable both options and use at least 7 words. If you need a truly high-security credential from this toolkit, use the random character generator instead.
 
 ---
 
@@ -123,7 +123,7 @@ Generated password: r@4Xk!mZ8#wQ2TvLp9&N
 
 ### Passphrase Generator (`passphrase_generator.py`)
 
-This tool builds a passphrase by randomly selecting words from a curated 120-word list and combining them with your chosen formatting options. The result is easier to remember than a random character password while still providing meaningful protection when enough words are used.
+This tool builds a passphrase by randomly selecting words from a curated 1,024-word list and combining them with your chosen formatting options. The result is easier to remember than a random character password while still providing meaningful protection when enough words are used.
 
 **Run the script:**
 ```
@@ -134,7 +134,7 @@ python passphrase_generator.py
 
 The generator prompts you through four customization steps before assembling your passphrase:
 
-1. **Word count** — Enter a whole number for how many words to include. The script recommends 4–6 but accepts any positive integer. Refer to the entropy table above and aim for at least 8 words for real protection.
+1. **Word count** — Enter a whole number for how many words to include. The script recommends 4–6 but accepts any positive integer. Refer to the entropy table above and aim for at least 7 words for real protection.
    ```
    How many words would you like in your passphrase? (recommended: 4-6) 8
    ```
