@@ -1,7 +1,8 @@
-import random
+import secrets
 import os
 
-# Load word list from words.txt (1024 words, 10 bits of entropy per word)
+# Load word list from words.txt (1024 words = exactly 10 bits of entropy per word
+# when selected with a cryptographically secure RNG)
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(_script_dir, "words.txt")) as _f:
     WORD_LIST = [line.strip() for line in _f if line.strip()]
@@ -44,8 +45,8 @@ capitalize = input("\nWould you like to capitalize each word? (y/n) ").lower() =
 # Ask about appending a number
 addNumber = input("Would you like to add a random number at the end? (y/n) ").lower() == 'y'
 
-# Build the passphrase
-words = [random.choice(WORD_LIST) for _ in range(numOfWords)]
+# Build the passphrase using a cryptographically secure RNG
+words = [secrets.choice(WORD_LIST) for _ in range(numOfWords)]
 
 if capitalize:
     words = [word.capitalize() for word in words]
@@ -53,6 +54,7 @@ if capitalize:
 passphrase = separator.join(words)
 
 if addNumber:
-    passphrase += str(random.randint(10, 999))
+    # secrets.randbelow(10000) gives a uniform draw over 0-9999 (~13.3 bits of entropy)
+    passphrase += str(secrets.randbelow(10000))
 
 print("\nYour passphrase is:", passphrase)
