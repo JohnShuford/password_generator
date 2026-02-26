@@ -1,8 +1,8 @@
 import secrets
 import os
 
-# Load word list from words.txt (1024 words = exactly 10 bits of entropy per word
-# when selected with a cryptographically secure RNG)
+# Load word list from words.txt (EFF Large Wordlist: 7776 words = ~12.9 bits of
+# entropy per word when selected with a cryptographically secure RNG)
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 with open(os.path.join(_script_dir, "words.txt")) as _f:
     WORD_LIST = [line.strip() for line in _f if line.strip()]
