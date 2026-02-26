@@ -1,5 +1,4 @@
-# Chat GPT Improvements
-import random
+import secrets
 import string
 
 # User input for password length
@@ -26,6 +25,10 @@ if not charType:
     print("No character types selected. Exiting...")
     exit()
 
+if numOfCharacters < len(charType):
+    print(f"Password length must be at least {len(charType)} to satisfy all selected character types. Exiting...")
+    exit()
+
 char_map = {
     'lower': string.ascii_lowercase,
     'upper': string.ascii_uppercase,
@@ -33,65 +36,17 @@ char_map = {
     'punctuation': string.punctuation
 }
 
-# Build the password
-password_chars = []
-for _ in range(numOfCharacters):
-    randCharType = random.choice(charType)
-    password_chars.append(random.choice(char_map[randCharType]))
+# Guarantee at least one character from each selected type
+password_chars = [secrets.choice(char_map[t]) for t in charType]
 
-# Join into final password string
+# Fill remaining positions from the combined pool for a uniform distribution
+pool = ''.join(char_map[t] for t in charType)
+password_chars += [secrets.choice(pool) for _ in range(numOfCharacters - len(charType))]
+
+# Shuffle using Fisher-Yates with a cryptographically secure source
+for i in range(len(password_chars) - 1, 0, -1):
+    j = secrets.randbelow(i + 1)
+    password_chars[i], password_chars[j] = password_chars[j], password_chars[i]
+
 password = ''.join(password_chars)
 print(password)
-
-'''
-~~~Begining of John's OG work and first attempt~~
-import random
-import string
-
-#create variables
-emptyPassword = []
-charType = []
-
-#verify wanted legnth of the password
-numOfCharacters = input("How many characters would you like your password to be?")
-
-#verify the types of characters the user wants in their password
-wantLower = input("Would you like lower case letters? (y/n)")
-if wantLower == 'y':
-  charType.append('lower')
-
-wantUpper = input("Would you like upper case letters? (y/n)")
-if wantUpper == 'y':
-  charType.append('upper')
-
-wantNums = input("Would you like digits? (y/n)")
-if wantNums == 'y':
-  charType.append('nums')
-
-wantSpecialCharacters = input("Would you like special characters? (y/n)")
-if wantSpecialCharacters == 'y':
-  charType.append('punctuation')
-
-#create the random password
-for x in range(int(numOfCharacters)):
-  #randomize the character type
-  randCharType = random.choice(charType)
-
-  #randomize the character value based on the random character
-  if randCharType == 'lower' :
-    char = random.choice(string.ascii_lowercase)
-  elif randCharType == 'upper' :
-    char = random.choice(string.ascii_uppercase)
-  elif randCharType == 'nums' :
-    char = random.choice(string.digits)
-  else :
-    char = random.choice(string.punctuation)
-
-  #append the character to the password list
-  emptyPassword.append(char)
-
-#conver the list to a string
-password = ''.join(str(x) for x in emptyPassword)
-
-print(password)
-'''

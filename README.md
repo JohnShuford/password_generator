@@ -2,6 +2,8 @@
 
 A command-line Python toolkit for generating secure passwords. Two generators are included: one that builds passwords from randomized characters, and one that assembles memorable passphrases from a word list.
 
+Both tools use Python's `secrets` module, which draws from the operating system's cryptographically secure random number generator (`/dev/urandom` on Linux/macOS). This makes the output suitable for real security use, unlike `random`, which is not designed for cryptographic purposes.
+
 ---
 
 ## Understanding Password Security
@@ -33,19 +35,18 @@ When you enable all four character types, your pool is **94 possible characters*
 
 ### Passphrases (`passphrase_generator.py`)
 
-Passphrases trade raw character entropy for human memorability. This generator draws from a curated list of **1,024 common words**, giving each word exactly **10 bits of entropy** (log₂ 1024 = 10). This is a significant improvement over smaller word lists — each additional word now contributes more entropy, so you need fewer words to reach a strong security level.
+Passphrases trade raw character entropy for human memorability. This generator draws from the **EFF Large Wordlist**, the industry standard for diceware-style passphrases. The list contains **7,776 words**, giving each word approximately **12.9 bits of entropy** (log₂ 7776 ≈ 12.92). The EFF list was specifically designed so words are unambiguous, easy to spell, and comfortable to type.
 
 | Word Count | Entropy (words only) | With Number Suffix | Security Level | Suitable For |
 |------------|---------------------|-------------------|----------------|--------------|
-| 4 words | 40 bits | ~50 bits | Weak | Do not use alone |
-| 5 words | 50 bits | ~60 bits | Low | Low-stakes accounts only |
-| 6 words | 60 bits | ~70 bits | Moderate | Low-stakes accounts |
-| 7 words | 70 bits | ~80 bits | Strong | Standard accounts |
-| 8 words | 80 bits | ~90 bits | Very Strong | High-value accounts (email, banking) |
-| 10 words | 100 bits | ~110 bits | Excellent | Critical accounts, password manager master password |
-| 12+ words | 120+ bits | ~130+ bits | Outstanding | Encryption keys, root credentials |
+| 4 words | ~52 bits | ~65 bits | Low | Low-stakes accounts only |
+| 5 words | ~65 bits | ~78 bits | Moderate | Low-stakes accounts |
+| 6 words | ~78 bits | ~91 bits | Strong | Standard accounts (email, social media) |
+| 7 words | ~90 bits | ~104 bits | Very Strong | High-value accounts (banking, primary email) |
+| 8 words | ~103 bits | ~117 bits | Excellent | Critical accounts, password manager master password |
+| 10 words | ~129 bits | ~143 bits | Outstanding | Encryption keys, root credentials |
 
-> **Note:** The number suffix adds ~10 bits of entropy. Capitalization adds roughly 1 bit per word. For best results, enable both options and use at least 7 words. If you need a truly high-security credential from this toolkit, use the random character generator instead.
+> **Note:** The number suffix adds ~13.3 bits of entropy (uniform draw over 0–9999). Capitalization adds roughly 1 bit per word. For best results, enable both options. A 6-word passphrase with a number suffix reaches ~91 bits — strong enough for most accounts and far easier to remember than a random character password of equivalent strength.
 
 ---
 
@@ -77,7 +78,7 @@ cd password_generator
 
 ### Random Character Generator (`generator.py`)
 
-This tool generates a password by randomly selecting characters from the character sets you enable. Every character is chosen independently at random, producing a highly unpredictable result.
+This tool generates a password by randomly selecting characters from the character sets you enable. All characters are drawn from a single combined pool, ensuring a uniform distribution across every selected type. The generator also guarantees that at least one character from each selected type appears in the final password, satisfying sites that require a mix of character types.
 
 **Run the script:**
 ```
@@ -123,7 +124,7 @@ Generated password: r@4Xk!mZ8#wQ2TvLp9&N
 
 ### Passphrase Generator (`passphrase_generator.py`)
 
-This tool builds a passphrase by randomly selecting words from a curated 1,024-word list and combining them with your chosen formatting options. The result is easier to remember than a random character password while still providing meaningful protection when enough words are used.
+This tool builds a passphrase by randomly selecting words from the EFF Large Wordlist (7,776 words) and combining them with your chosen formatting options. The result is easier to remember than a random character password while still providing strong protection.
 
 **Run the script:**
 ```
@@ -155,7 +156,7 @@ The generator prompts you through four customization steps before assembling you
    Capitalize each word? (y/n) y
    ```
 
-4. **Number suffix** — Choose whether to append a random 2–3 digit number (10–999) to the end of the passphrase. This adds approximately 10 bits of entropy and is recommended.
+4. **Number suffix** — Choose whether to append a random number (0–9999) to the end of the passphrase. This adds approximately 13.3 bits of entropy and is recommended.
    ```
    Add a random number to the end? (y/n) y
    ```
