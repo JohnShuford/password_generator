@@ -55,6 +55,6 @@ passphrase = separator.join(words)
 
 if addNumber:
     # secrets.randbelow(10000) gives a uniform draw over 0-9999 (~13.3 bits of entropy)
-    passphrase += str(secrets.randbelow(10000))
+    passphrase += separator + str(secrets.randbelow(10000))
 
 print("\nYour passphrase is:", passphrase)
